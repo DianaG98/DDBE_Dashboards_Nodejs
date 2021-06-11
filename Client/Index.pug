@@ -1,0 +1,86 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    title Inicio - DDBE Dashboards
+    link(rel='shortcut icon', href='../images/fav_icon.png', type='image/x-icon')
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css')
+    link(href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,700', rel='stylesheet')
+    // Bulma Version 0.8.x
+    link(rel='stylesheet', href='node_modules/bulma/css/bulma.min.css')
+    link(rel='stylesheet' href='Advanced_grid_demo_files/landing.css')
+  body
+    section.hero.is-info.is-fullheight
+      .hero-head
+        nav.navbar
+          .container
+            .navbar-brand
+              //-a.navbar-item.brand-text(href='/')
+                //img(src='http://bulma.io/images/bulma-type-white.png', alt='Logo')
+                | DDBE 
+              span.navbar-burger.burger(data-target='navbarMenu')
+                span
+                span
+                span
+            #navbarMenu.navbar-menu
+              .navbar-end
+                span.navbar-item
+                  a.button.is-white.is-outlined(href='/')
+                    span.icon
+                      i.fa.fa-home
+                    span Inicio
+                span.navbar-item
+                  a.button.is-white.is-outlined(href='/Login')
+                    span.icon
+                      i.fa.fa-user
+                    span Iniciar Sesión
+                
+                
+      .hero-body
+        .container.has-text-centered
+          .column.is-6.is-offset-3
+            h1.title
+              | DDBE Dashboards&nbsp 
+              span.icon
+                i.fa.fa-bar-chart
+            h2.subtitle
+              | La solución perfecta para visualizar la información de tu negocio.
+            //-.box
+              .field.is-grouped
+                p.control.is-expanded
+                  input.input(type='text', placeholder='Enter your email')
+                p.control
+                  a.button.is-info
+                    | Notify Me
+        
+          .row.columns
+            .column.is-one-third
+                .card.large
+                .card-image
+                    figure.image
+                    img(src='Advanced_grid_demo_files/Imagenes/index1.jpg', alt='Image')
+                .card-content
+                    .content
+                    | Tableros para viualizar la información de tu negocio por áreas o secciones.
+
+            .column.is-one-third
+                .card.large
+                .card-image
+                    figure.image
+                    img(src='Advanced_grid_demo_files/Imagenes/index2.jpg', alt='Image')
+                .card-content
+                    .content
+                    | Tableros con diversas funcionalidades. Guarda, borra, inserta, restablece y más.
+                    
+            .column.is-one-third
+                .card.large
+                .card-image
+                    figure.image
+                    img(src='Advanced_grid_demo_files/Imagenes/index3.jpg', alt='Image')
+                .card-content
+                    .content
+                    | Diferentes gráficas, adaptadas a la información de tu negocio.
+                    
+    script(async='', type='text/javascript', src='Advanced_grid_demo_files/bulma.js') 

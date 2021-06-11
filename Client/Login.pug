@@ -1,0 +1,65 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    title Iniciar Sesión - DDBE Dashboards
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css')
+    // <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
+    link(href='https://fonts.googleapis.com/css?family=Questrial&display=swap', rel='stylesheet')
+    // Bulma Version 0.8.x
+    link(rel='stylesheet', href='node_modules/bulma/css/bulma.min.css')
+    link(rel='stylesheet' href='Advanced_grid_demo_files/login.css')
+    //link(rel='stylesheet', type='text/css', href='../css/login.css')
+  body
+    section.hero.is-success.is-fullheight
+      .hero-head
+        nav.navbar
+          .container
+            .navbar-brand
+              //-a.navbar-item.brand-text(href='/')
+                //img(src='http://bulma.io/images/bulma-type-white.png', alt='Logo')
+                | DDBE 
+              span.navbar-burger.burger(data-target='navbarMenu')
+                span
+                span
+                span
+            #navbarMenu.navbar-menu
+              .navbar-end
+                span.navbar-item
+                  a.button.is-black.is-outlined(href='/')
+                    span.icon
+                      i.fa.fa-home
+                    span Inicio
+                span.navbar-item
+                  a.button.is-black.is-outlined(href='/Login')
+                    span.icon
+                      i.fa.fa-user
+                    span Iniciar Sesión
+      .hero-body
+        .container.has-text-centered
+          h3.title.has-text-black=message
+          .column.is-4.is-offset-4 
+            
+            h3.title.has-text-black Iniciar Sesión
+            hr.login-hr
+           
+            .box
+              figure.avatar
+                img(src='Advanced_grid_demo_files/Imagenes/usuario.png' style="height:200px")
+              form(action='loginUsuario', method='POST')
+                .field
+                  .control
+                    input.input.is-large(type='text', name='username', placeholder='Usuario', required='')
+                .field
+                  .control
+                    input.input.is-large(type='password', name='password', placeholder='Contraseña', required='')
+                
+                button.button.is-block.is-info.input(type='submit') Ingresar
+                //-button.button.is-block.is-info.is-large.is-fullwidth
+                 
+                  i.fa.fa-sign-in(aria-hidden='true')
+            
+    
+    script(async='', type='text/javascript', src='Advanced_grid_demo_files/bulma.js')

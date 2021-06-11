@@ -1,0 +1,626 @@
+html
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    title Abarrotes - DDBE Dashboards
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css')
+    link(href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,700', rel='stylesheet')
+    // Bulma Version 0.8.x
+    link(rel='stylesheet', href='node_modules/bulma/css/bulma.min.css')
+    //link(rel='stylesheet', type='text/css', href='Advanced_grid_demo_files/admin.css')
+    
+    link(rel='stylesheet' href='Advanced_grid_demo_files/bootstrap.min.css')
+    link(rel='stylesheet' href='Advanced_grid_demo_files/demo.css')
+    script(type='module', src='Advanced_grid_demo_files/jquery.min.js')
+    script(type='module', src='Advanced_grid_demo_files/gridstack.all.js')
+    script(type='module', src='Advanced_grid_demo_files/FusionCharts/js/fusioncharts.js')
+    script(type='module', src='Advanced_grid_demo_files/FusionCharts/js/themes/fusioncharts.theme.fusion.js')
+    
+
+    style(type='text/css').
+      .grid-stack-item-removing {
+        opacity: 0.8;
+        filter: blur(5px);
+      }
+      #trash {
+        background: rgba(255, 0, 0, 0.4);
+      }
+      #ini{
+        background: aliceblue;
+      }
+      .tam{
+          height: 460px;
+      }
+    script(src='https://code.jquery.com/jquery-1.11.1.js')
+  body
+    // START NAV
+    nav.navbar.is-white
+      
+        .navbar-brand
+          a.navbar-item.brand-text(href='/IndexU2')
+            span DDBE Dashboards 
+            span &nbsp
+            span.icon
+              i.fa.fa-bar-chart 
+            
+          .navbar-burger.burger(data-target='navMenu')
+            span
+            span
+            span
+        #navMenu.navbar-menu
+          .navbar-start
+            a.navbar-item(href='/IndexU2')
+              | Inicio
+            a.navbar-item(href='/AbarrotesU2')
+              | Abarrotes
+            a.navbar-item(href='/BebidasU2')
+              | Bebidas
+            a.navbar-item(href='/BotanasU2')
+              | Botanas
+            a.navbar-item(href='/JarcieriaU2')
+              | Jarciería
+          .navbar-end
+            a.button.is-black.is-outlined(href='/cerrarSesion')
+              span.icon
+                i.fa.fa-user-times
+              span Cerrar sesión
+    // END NAV
+    .container
+        nav.breadcrumb(aria-label='breadcrumbs')
+          ul
+            li
+              a(href='/IndexU2') Inicio
+            li.is-active
+              a(href='/AbarrotesU2', aria-current='page') Abarrotes 
+            
+        
+        
+        .buttons.has-addons
+          a#clear-grid.button.button 
+            span.icon
+              i.fa.fa-times
+            span Borrar tablero
+          a#actualizar.button.button
+            span.icon
+              i.fa.fa-refresh
+            span Actualizar tablero 
+          
+        
+        .column
+                
+            #trash.text-center.ui-droppable(style='padding: 15px; margin-bottom: 15px;')
+                h3 Arrastra a esta zona para eliminar
+        
+        .row(style='width:100%;margin: 0 auto;')
+            .col-md-2.d-none.d-md-block
+                
+                    
+                
+                br
+                img(src='Advanced_grid_demo_files/Imagenes/barras.png')
+                a#agregar.button.button.is-fullwidth.button.is-info Producto 
+                
+                br
+                img(src='Advanced_grid_demo_files/Imagenes/gauge.png')
+                a#agregar2.button.button.is-fullwidth.button.is-info Ventas
+
+                br
+                img(src='Advanced_grid_demo_files/Imagenes/pastel.png')
+                a#agregar3.button.button.is-fullwidth.button.is-info Ventas por empleado
+                
+               
+                textarea#saved-data(cols='40', rows='20',style="display:none;")
+            .col-sm-12.col-md-10
+                #advanced-grid.grid-stack.grid-stack-instance-7057.grid-stack-animate.ui-droppable(data-gs-animate='yes', data-gs-current-height='6', style='height: 460px; background-color:aliceblue;')
+                .grid-stack-item.ui-draggable.ui-resizable.ui-resizable-autohide
+            
+        br
+        br
+        br
+        br
+      
+      
+    script(async='', type='text/javascript', src='Advanced_grid_demo_files/bulma.js')                         
+    script(
+		    src='https://code.jquery.com/jquery-3.4.1.js'
+		    integrity='sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU='
+	    	crossorigin='anonymous')
+    
+
+
+  script(type='text/javascript').
+    function consultaCoordenadas(){
+          var coordenadas;
+          $.ajax({
+                  url: '/consultaCoordenadas',
+                  type: 'GET',
+                  dataType: 'json',
+                  async:false,//para poder guardar en variable
+                  success: (data) => {
+                      coordenadas=data.response;    
+                  }
+              });
+            return coordenadas;
+        }
+    
+  script(type='text/javascript').
+    $(function () {
+      //cargar();
+      var $grid = $('.grid-stack');
+      $grid.on('added', function(e, items) { log(' added ', items) });
+      $grid.on('removed', function(e, items) { log(' removed ', items) });
+      $grid.on('change', function(e, items) { log(' change ', items) });
+      function log(type, items) {
+          if (!items) { return; }
+          var str = '';
+          for (let i=0; i<items.length && items[i]; i++) { str += ' (x,y)=' + items[i].x + ',' + items[i].y; }
+            console.log(type + items.length + ' items.' + str );
+      }
+
+      $grid.gridstack({
+            alwaysShowResizeHandle: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+            navigator.userAgent
+          ),
+            resizable: {
+              handles: 'e, se, s, sw, w'
+            },
+            removable: '#trash',
+            removeTimeout: 100,
+            acceptWidgets: '.newWidget'
+          });
+          $('.newWidget').draggable({
+            revert: 'invalid',
+            scroll: false,
+            appendTo: 'body',
+            helper: 'clone'
+          });
+
+
+        //$grid.gridstack();
+        //llevar control de las graficas
+       
+        var contador=0;
+        
+        var contador2=1000;
+        
+        var contador3=2000;
+        var arr_coordenadas=consultaCoordenadas();
+        var coordenadas=arr_coordenadas[0];
+        
+        $('#saved-data').val(coordenadas);
+        
+        new function () {
+          this.serializedData = [
+            {x: 0, y: 0, width: 0, height: 0, id: contador, tipo: 0},
+          ];
+        this.serializedData = JSON.parse(coordenadas); 
+          this.grid = $('.grid-stack').data('gridstack');
+          
+          this.loadGrid1 = function () {
+            this.grid.removeAll();
+            var items = GridStackUI.Utils.sort(this.serializedData);
+            this.grid.batchUpdate();
+            items.forEach(function (node) {
+            this.grid.addWidget($('<div class="grid-stack-item ui-draggable ui-resizable ui-resizable-autohide ui-draggable-disabled ui-resizable-disabled" data-gs-no-move="true" data-gs-no-resize="true" data-gs-locked="true"><div class="grid-stack-item-content" id="ini"></div></div>'), node);
+            }, this);
+            this.grid.commit();
+            return false;
+          }.bind(this);
+
+      this.loadGrid = function () {
+        var cont=1;
+        this.grid.removeAll();
+        var items = GridStackUI.Utils.sort(this.serializedData);
+        this.grid.batchUpdate();
+        //crearGraficaCantidad(contador);
+        items.forEach(function (node) {
+        if(cont==1){
+          this.grid.addWidget($('<div class="grid-stack-item ui-draggable ui-resizable ui-resizable-autohide ui-draggable-disabled ui-resizable-disabled" data-gs-no-move="true" data-gs-no-resize="true" data-gs-locked="true"><div class="grid-stack-item-content" id="ini"></div></div>'), node);
+        }else{
+          if(node.id<1000){
+            crearGraficaCantidad(node.id);
+          this.grid.addWidget($('<div class="grid-stack-item"><div class="grid-stack-item-content"><div><div id="chart-container'+node.id+'"></div></div></div></div>'), node);
+          }else if(node.id>=1000 && node.id<2000){
+            crearGraficaVentas(node.id);
+          this.grid.addWidget($('<div class="grid-stack-item"><div class="grid-stack-item-content"><div><div id="chart'+node.id+'"></div></div></div></div>'), node);
+          }else if(node.id>=2000){
+            crearGraficaVentasEmpleado(node.id);
+          this.grid.addWidget($('<div class="grid-stack-item"><div class="grid-stack-item-content"><div><div id="chartVE'+node.id+'"></div></div></div></div>'), node);
+          }
+          
+        }
+        cont++;
+        }, this);
+        this.grid.commit();
+        return false;
+      }.bind(this);
+      
+     
+      
+      this.clearGrid = function () {
+        this.grid.removeAll();
+        this.serializedData2 = [
+          {x: 0, y: 0, width: 0, height: 0,id:0},
+        ];
+        var items = GridStackUI.Utils.sort(this.serializedData2);
+        this.grid.batchUpdate();
+        items.forEach(function (node) {
+          this.grid.addWidget($('<div><div class="grid-stack-item-content" id="ini" data-gs-no-move="true" data-gs-no-resize="true"></div></div>'), node);
+        }, this);
+        this.grid.commit();
+        return false;
+      }.bind(this);
+
+      this.addNewWidgetCantidad = function () {
+        contador++;
+        //actualizaContador1(contador);
+        this.serializedData3 = [
+          {x: 2, y: 2, width: 5, height: 5,id:contador},
+        ];
+        var items = GridStackUI.Utils.sort(this.serializedData3);
+        this.grid.batchUpdate();
+        crearGraficaCantidad(contador);
+        items.forEach(function (node) {
+          this.grid.addWidget($('<div><div class="grid-stack-item-content"><div><div id="chart-container'+contador+'"></div></div></div></div>'), node);
+        }, this);
+        this.grid.commit();
+        return false;
+      }.bind(this);
+      
+      this.addNewWidgetVentas = function () {
+        contador2++;
+        //actualizaContador2(contador2);
+        this.serializedData4 = [
+          {x: 2, y: 2, width: 5, height: 5,id:contador2},
+        ];
+        var items = GridStackUI.Utils.sort(this.serializedData4);
+        this.grid.batchUpdate();
+        crearGraficaVentas(contador2);
+        items.forEach(function (node) {
+          this.grid.addWidget($('<div><div class="grid-stack-item-content"><div><div id="chart'+contador2+'"></div></div></div></div>'), node);
+        }, this);
+        this.grid.commit();
+        return false;
+      }.bind(this);
+
+       this.addNewWidgetVentasEmpleado = function () {
+        contador3++;
+        //actualizaContador3(contador3);
+        this.serializedData5 = [
+          {x: 2, y: 2, width: 5, height: 5,id:contador3},
+        ];
+        var items = GridStackUI.Utils.sort(this.serializedData5);
+        this.grid.batchUpdate();
+        crearGraficaVentasEmpleado(contador3);
+        items.forEach(function (node) {
+          this.grid.addWidget($('<div><div class="grid-stack-item-content"><div><div id="chartVE'+contador3+'"></div></div></div></div>'), node);
+        }, this);
+        this.grid.commit();
+        return false;
+      }.bind(this);
+
+
+      this.actualizarTablero= function () {
+        this.serializedData = $('.grid-stack > .grid-stack-item:visible').map(function (i, el) {
+          el = $(el);
+          var node = el.data('_gridstack_node');
+          return {
+            x: node.x,
+            y: node.y,
+            width: node.width,
+            height: node.height,
+            id: node.id,
+            tipo: node.tipo
+          };
+        }).toArray();
+        $('#saved-data').val(JSON.stringify(this.serializedData, null, '  '));
+        cadena=$('#saved-data').val();
+        
+        //actualizaCoordenadas(cadena);
+
+        var cont=1;
+        this.grid.removeAll();
+        var items = GridStackUI.Utils.sort(this.serializedData);
+        this.grid.batchUpdate();
+        crearGraficaCantidad(contador);
+        items.forEach(function (node) {
+        if(cont==1){
+          this.grid.addWidget($('<div class="grid-stack-item ui-draggable ui-resizable ui-resizable-autohide ui-draggable-disabled ui-resizable-disabled" data-gs-no-move="true" data-gs-no-resize="true" data-gs-locked="true"><div class="grid-stack-item-content" id="ini"></div></div>'), node);
+        }else{
+          if(node.id<1000){
+            crearGraficaCantidad(node.id);
+            this.grid.addWidget($('<div class="grid-stack-item"><div class="grid-stack-item-content"><div><div id="chart-container'+node.id+'"></div></div></div></div>'), node);
+          }else if(node.id>=1000 && node.id<2000){
+            crearGraficaVentas(node.id);
+            this.grid.addWidget($('<div class="grid-stack-item"><div class="grid-stack-item-content"><div><div id="chart'+node.id+'"></div></div></div></div>'), node);
+          }else if(node.id>=2000){
+            crearGraficaVentasEmpleado(node.id);
+            this.grid.addWidget($('<div class="grid-stack-item"><div class="grid-stack-item-content"><div><div id="chartVE'+node.id+'"></div></div></div></div>'), node);
+          }
+          
+        }
+        cont++;
+        }, this);
+        this.grid.commit();
+      }.bind(this);
+
+      
+      
+      
+      
+      
+      $('#clear-grid').click(this.clearGrid);
+      $('#agregar').click(this.addNewWidgetCantidad);
+      $('#agregar2').click(this.addNewWidgetVentas);
+      $('#agregar3').click(this.addNewWidgetVentasEmpleado);
+      $('#actualizar').click(this.actualizarTablero);
+      
+      
+      this.loadGrid();
+      
+      
+      };
+    });
+
+  script(type='text/javascript').
+      //crear gráfica
+      function crearGraficaCantidad(contador){
+        var cantidades
+            $.ajax({
+                url: '/consultaAbarrotesCantidadProductos',
+                type: 'GET',
+                dataType: 'json',
+                async:false,//para poder guardar en variable
+                success: (data) => {
+                    cantidades=data.response
+                    $('#main-list').html('');
+                    for (var i = 0; i < data.response.length; i++) {
+                        $('#main-list').append('<li class="list-group-item">' + cantidades[i] + '</li>');
+                    }  
+                }
+            });
+        var nombres
+            $.ajax({
+                url: '/consultaAbarrotesNombreProductos',
+                type: 'GET',
+                dataType: 'json',
+                async:false,//para poder guardar en variable
+                success: (data) => {
+                    nombres=data.response
+                    
+                }
+            });
+        const chartData=[{"label": ""+nombres[0],"value": ""+cantidades[0]}];
+        for(var i=1;i<nombres.length;i++){
+          chartData.push({"label": ""+nombres[i],"value": ""+cantidades[i]})
+        }
+        /*var chartData = [{
+        "label": "Venezuela",
+        "value": ""+datos[0]
+        }, {
+        "label": "Saudi",
+        "value": "1"
+        }, {
+        "label": "Canada",
+        "value": "1"
+        }, {
+        "label": "Iran",
+        "value": "1"
+        }, {
+        "label": "Russia",
+        "value": "1"
+        }, {
+        "label": "UAE",
+        "value": "1"
+        }, {
+        "label": "US",
+        "value": "1"
+        }, {
+        "label": "China",
+        "value": "1"
+        }];
+
+        chartData.push({
+        "label": "Mexico",
+        "value": "1"}
+        )
+        chartData.push({"label":"Holanda","value":"1"})*/
+      /*const newArray*/
+      
+        var d = new Date();
+        meses=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"]
+        var fecha='Corte al '+d.getDate()+' de '+meses[d.getMonth()]+' del '+d.getFullYear()+', Hora: '+d.getHours() +':'+d.getMinutes();
+        // STEP 3 - Chart Configurations
+        const chartConfig = {
+        
+        type: 'column2d',
+        renderAt: 'chart-container1',
+        width: '100%',
+        height: '100%',
+        dataFormat: 'json',
+        dataSource: {
+        // Chart Configuration
+        "chart": {
+        "caption": "Cantidad de producto -Abarrotes-",
+        "subCaption": ""+fecha,
+        "xAxisName": "Productos",
+        "yAxisName": "Cantidad",
+        "numberSuffix": "",
+        "theme": "fusion",
+        },
+        // Chart Data
+        "data": chartData
+        }
+        };
+        FusionCharts.ready(function(){
+        var fusioncharts = new FusionCharts(chartConfig);
+        fusioncharts.render();
+        var cloned_chart = fusioncharts.clone();
+        console.log(cloned_chart);
+        cloned_chart.render('chart-container'+contador);
+        });
+        return false;
+      }
+      function clonar(contador){
+        var cloned_chart = fusionchartsglobal.clone();
+        console.log(cloned_chart);
+        cloned_chart.render('chart-container'+contador);}
+
+
+  script(type='text/javascript').
+    function crearGraficaVentas(contador){
+      var cantidades;
+      var total=0;
+            $.ajax({
+                url: '/consultaAbarrotesCantidadVenta',
+                type: 'GET',
+                dataType: 'json',
+                async:false,//para poder guardar en variable
+                success: (data) => {
+                    cantidades=data.response;
+                    
+                }
+            });
+            for(var i=0;i<cantidades.length;i++){
+              total=total+cantidades[i];
+            }
+      const dataSource = {
+        chart: {
+          caption: "Ventas",
+          lowerlimit: "0",
+          upperlimit: "10000",
+          showvalue: "1",
+          numbersuffix: "",
+          theme: "fusion",
+          showtooltip: "0"
+        },
+        colorrange: {
+          color: [
+            {
+              minvalue: "0",
+              maxvalue: "5000",
+              code: "#F2726F"
+            },
+            {
+              minvalue: "5000",
+              maxvalue: "7500",
+              code: "#FFC533"
+            },
+            {
+              minvalue: "7500",
+              maxvalue: "10000",
+              code: "#62B58F"
+            }
+          ]
+        },
+        dials: {
+          dial: [
+            {
+              value: " "+total
+            }
+          ]
+        }
+      };
+
+      FusionCharts.ready(function() {
+        var myChart = new FusionCharts({
+          type: "angulargauge",
+          renderAt: "chart",
+          width: "100%",
+          height: "100%",
+          dataFormat: "json",
+          dataSource
+        }).render();
+        var cloned_chart = myChart.clone();
+        console.log(cloned_chart);
+        cloned_chart.render('chart'+contador);
+      });
+
+    }
+
+    function crearGraficaVentasEmpleado(contador){
+      var cantidadesE1;
+      var totalE1=0;
+            $.ajax({
+                url: '/consultaAbarrotesVentasEmpleado1',
+                type: 'GET',
+                dataType: 'json',
+                async:false,//para poder guardar en variable
+                success: (data) => {
+                    cantidadesE1=data.response;
+                    
+                }
+            });
+      for(var i=0;i<cantidadesE1.length;i++){
+        totalE1=totalE1+cantidadesE1[i];
+      }
+
+      var cantidadesE2;
+      var totalE2=0;
+            $.ajax({
+                url: '/consultaAbarrotesVentasEmpleado2',
+                type: 'GET',
+                dataType: 'json',
+                async:false,//para poder guardar en variable
+                success: (data) => {
+                    cantidadesE2=data.response;
+                    
+                }
+            });
+      for(var i=0;i<cantidadesE2.length;i++){
+        totalE2=totalE2+cantidadesE2[i];
+      }
+
+      var cantidadesE3;
+      var totalE3=0;
+            $.ajax({
+                url: '/consultaAbarrotesVentasEmpleado3',
+                type: 'GET',
+                dataType: 'json',
+                async:false,//para poder guardar en variable
+                success: (data) => {
+                    cantidadesE3=data.response;
+                    
+                }
+            });
+      for(var i=0;i<cantidadesE3.length;i++){
+        totalE3=totalE3+cantidadesE3[i];
+      }
+      FusionCharts.ready(function(){
+        var chartObj = new FusionCharts({
+          type: 'pie2d',
+          renderAt: 'chartVE',
+          width: '100%',
+          height: '100%',
+          dataFormat: 'json',
+          dataSource: {
+              "chart": {
+                  "caption": "Ventas por empleado",
+                  "subCaption": "",
+                  "numberPrefix": "$",
+                  "showPercentInTooltip": "0",
+                  "decimals": "1",
+                  "useDataPlotColorForLabels": "1",
+                  //Theme
+                  "theme": "fusion"
+              },
+              "data": [{
+                  "label": "Juan Perez",
+                  "value": totalE1
+              }, {
+                  "label": "Sofia Reyes",
+                  "value": totalE2
+              }, {
+                  "label": "Laura Flores",
+                  "value": totalE3
+              }]
+          }
+        }
+      );
+          chartObj.render();
+          var cloned_chart = chartObj.clone();
+          console.log(cloned_chart);
+          cloned_chart.render('chartVE'+contador);
+      });
+    }

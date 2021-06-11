@@ -1,0 +1,147 @@
+html
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    title Inicio - DDBE Dashboards
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css')
+    link(href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,700', rel='stylesheet')
+    link(rel='shortcut icon', href='../images/fav_icon.png', type='image/x-icon')
+    // Bulma Version 0.8.x
+    link(rel='stylesheet', href='node_modules/bulma/css/bulma.min.css')
+    
+    
+    link(rel='stylesheet' href='Advanced_grid_demo_files/bootstrap.min.css')
+    link(rel='stylesheet' href='Advanced_grid_demo_files/demo.css')
+    script(type='module', src='Advanced_grid_demo_files/jquery.min.js')
+    script(type='module', src='Advanced_grid_demo_files/gridstack.all.js')
+    script(type='module', src='Advanced_grid_demo_files/FusionCharts/js/fusioncharts.js')
+    script(type='module', src='Advanced_grid_demo_files/FusionCharts/js/themes/fusioncharts.theme.fusion.js')
+    
+
+    style(type='text/css').
+      .grid-stack-item-removing {
+        opacity: 0.8;
+        filter: blur(5px);
+      }
+      #trash {
+        background: rgba(255, 0, 0, 0.4);
+      }
+      #ini{
+        background: aliceblue;
+      }
+      .tam{
+          height: 460px;
+      }
+      
+    script(src='https://code.jquery.com/jquery-1.11.1.js')
+  body
+    // START NAV
+    nav.navbar.is-white
+      
+        .navbar-brand
+          a.navbar-item.brand-text(href='/IndexU2')
+            span DDBE Dashboards 
+            span &nbsp
+            span.icon
+              i.fa.fa-bar-chart 
+            
+          .navbar-burger.burger(data-target='navMenu')
+            span
+            span
+            span
+        #navMenu.navbar-menu
+          .navbar-start
+            a.navbar-item(href='/IndexU2')
+              | Inicio
+            a.navbar-item(href='/AbarrotesU2')
+              | Abarrotes
+            a.navbar-item(href='/BebidasU2')
+              | Bebidas
+            a.navbar-item(href='/BotanasU2')
+              | Botanas
+            a.navbar-item(href='/JarcieriaU2')
+              | Jarciería
+          .navbar-end
+            a.button.is-black.is-outlined(href='/cerrarSesion')
+              span.icon
+                i.fa.fa-user-times
+              span Cerrar sesión
+    // END NAV
+    .container
+          
+        br
+        br    
+        section.hero.is-info.welcome.is-small
+            .hero-body
+            .container
+                h1.title
+                    | Bienvenido 
+                h2.subtitle
+                    | Personal
+        
+        
+        br
+        br
+        .columns.is-multiline
+            .column
+                .box.notification.is-primary
+                    .title Abarrotes
+                    .level
+                        .level-item
+                        div
+                            img(src='Advanced_grid_demo_files/Imagenes/abarrotes.png')
+                        .level-item
+                        div
+                            span &nbsp
+                        .level-item
+                        div
+                            a.button.is-primary.is-inverted.is-outlined(href='/AbarrotesU2')
+                                span Tablero
+                        
+            .column
+                .box.notification.is-info
+                    .title Bebidas
+                    .level
+                        .level-item
+                        div
+                            img(src='Advanced_grid_demo_files/Imagenes/bebidas.png')
+                        .level-item
+                        div
+                            span &nbsp
+                        .level-item
+                        div
+                            a.button.is-info.is-inverted.is-outlined(href='/BebidasU2')
+                                span Tablero
+            .column
+                .box.notification.is-danger
+                    .title Botanas
+                    .level
+                        .level-item
+                        div
+                            img(src='Advanced_grid_demo_files/Imagenes/botanas.png')
+                        .level-item
+                        div
+                            span &nbsp
+                        .level-item
+                        div
+                            a.button.is-danger.is-inverted.is-outlined(href='/BotanasU2')
+                                span Tablero
+            .column
+                .box.notification.is-success
+                    .title Jarciería
+                    
+                    .level
+                        .level-item
+                        div
+                           img(src='Advanced_grid_demo_files/Imagenes/jarcieria.png')
+                        .level-item
+                        div
+                            span &nbsp
+                        .level-item
+                        div
+                            a.button.is-success.is-inverted.is-outlined(href='/JarcieriaU2')
+                                span Tablero
+      
+      
+    script(async='', type='text/javascript', src='Advanced_grid_demo_files/bulma.js')  
